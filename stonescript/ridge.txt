@@ -1,0 +1,104 @@
+//
+// -< 07 >- Icy Ridge
+//
+
+? ll_="icy" &fd_<=22
+^&_cktm()
+
+  // 裏技: メニューを開くとお休みをキャンセル可能
+  /* Fixed pause skip exploit
+  ? fi_=yeti&fs_=1&ft_=33
+  ^ &SpeedPriority!"Off"
+    ui.OpenInv()
+  */
+
+  // Elite
+  ? ff_="ice_elemental_elite"
+    ? fd_>=16
+      BashDash()
+    ? _oosr()
+      ? _DebuffStaff(2)
+        aac_l = "fire sword -big *10 +21"
+        aac_r = "ice sword -big *10 +21"
+        FullMoondialing(aac_l, aac_r)
+
+  // Wall
+  ? ff_="wall" | ff_="pillar"
+    /*
+    ? fd_ <=20
+      equip Aether Staff
+    */
+    ? fd_ <=23
+      equipL Aether Wand
+
+  // Yeti
+  ? ff_=yeti
+    ? fs_=0 &  _ica
+      activate potion
+
+    ? fd_>=16
+      BashDash()
+    ? _oosr()
+      ? _DebuffStaff(2)
+        ? mh_ < mm_
+          aac_l = "ice sword D -big"
+          aac_r = "vigor sword dL -big"
+          FullMoondialing(aac_l, aac_r)
+          ShowAction("HEAL")
+        :
+          aac_l = "fire sword D -big"
+          aac_r = "ice sword D -big"
+          FullMoondialing(aac_l, aac_r)
+          ShowAction("Fullmoon")
+
+/*
+** 壁を作る前に倒せるようになった
+**
+  // ボスが前に作る壁 何か飛んでくるから盾を持っておく
+  ? totaltime > 65*30 & ll_="icy" & ff_=wall
+    equipL Big Fire Sword *10
+    equipR vigor Shield *10
+    ShowAction("ICY WALL SWORD&SHIELD 剣&盾")
+*/
+
+
+/*
+  // 余裕のある展開用
+  // ザコ敵は杖の連射で倒していく
+  // 遠距離は両方杖
+  ? fa_<=0 & ff_!"boss" 
+  ^&ff_!wall
+  ^&ff_!pillar
+  ^&fd_<20
+  ^&fc_ >1
+    equipL fire wand *10 //炎、杖連射 16祝福
+    equipR aether wand *10
+    ShowAction("WAND 杖")
+
+  // 中距離は杖と盾
+  ? fa_<=0 & ff_!"boss" 
+  ^&ff_!wall
+  ^&ff_!pillar
+  ^&fd_<13
+  ^&fc_ >1
+    equipL fire wand *10  //炎、杖連射 16祝福
+    equipR fire shield *10 
+    ShowAction("WAND 杖")
+
+  // 固い敵が少数なら盾は使わない
+  ? fa_<=0 & ff_!"boss" 
+  ^&(ff_=wall | ff_=pillar)
+  ^&fd_<13
+  ^&fc_ <= 2
+    equipL fire big sword *10
+    equipR fire wand *10 
+    ShowAction("WALL 壁")
+
+  // エレメンタルは雑魚敵を巻き込む→盾が必要
+  ? ff_="ice_elemental_elite"
+  ^&fd_<=20
+  ^&fs_!32
+    equipL Fire Wand *10
+    equipR Aether Wand *10
+    ShowAction("Wand&Wand 双杖")
+*/

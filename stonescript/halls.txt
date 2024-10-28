@@ -1,0 +1,80 @@
+//
+// -< 05 >- Haunted Halls
+//
+
+? ll_="halls"
+^&_cktm()
+
+  //敵が大量発生するところで、発生源をまず叩く
+  // Big Boo をスルーして R.I.Pieces に矢が届く！
+  var rip = false
+  var oldki
+
+  ? totaltime = 1
+    oldki = 0
+
+  ? foe.distance <= 50 & foe = "big_tomb"
+    rip = true
+  ? rip & foe.distance < 24
+    equip ice crossbow
+    ? oldki ! res.ki & oldki ! 0
+      rip = false
+    oldki = res.ki
+
+  /*
+  ? si_ = 7 & fd_ <=46
+    equip ice crossbow D
+    ShowAction("Big Boo & R.I.Pieces")
+    // 近くと遠くの敵の数が一緒なら、近くにしか敵がいない
+    ? fgc_(50) = fc_
+      equipL @C_Wand@
+      equipR @C_Shield@
+      ShowAction("Big Boo only")
+  */
+      
+// ボス戦
+? ll_="undead_crypt_boss"
+^&_cktm()
+  ? (ff_="Skinless")
+  ^&fd_<=23
+    aac_l = "vigor sword -big"
+    aac_r = "ice sword -big"
+    FullMoondialing(aac_l, aac_r)
+    /*
+    equip Big Ice Crossbow *10
+    ShowAction("BIC 氷大弓")
+    */
+    ? ff_="Skinless"
+    ^&fs_=32 & ft_=106
+      equipL mind
+      ShowAction("mindstone バックダッシュ")
+  ? (ff_="Legless")
+  ^&fd_<=23
+    equipL vigar wand
+    equipR ice wand
+    /*
+    aac_l = "vigor sword -big"
+    aac_r = "ice sword -big"
+    FullMoondialing(aac_l, aac_r)
+    */
+    /*
+    equipL "ice sword D -big *10 +21"
+    equipR @C_Sword@
+    ShowAction("標準装備でゴリ押し")
+    */
+  // すり抜けてきた雑魚には標準武器が適用される
+
+/*
+// ボス戦
+? ll_="undead_crypt_boss"
+^&_cktm()
+  ? (ff_="Skinless" | ff_="Legless")
+  ^&fd_<=23
+    equip Big Ice Crossbow *10
+    ShowAction("BIC 氷大弓")
+    ? ff_="Skinless"
+    ^&fs_=32 & ft_=106
+      equipL mind
+      ShowAction("mindstone バックダッシュ")
+  // すり抜けてきた雑魚には標準武器が適用される
+*/

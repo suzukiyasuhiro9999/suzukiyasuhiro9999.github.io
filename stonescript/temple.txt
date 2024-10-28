@@ -1,0 +1,54 @@
+//
+// -< 08 >- Temple
+//
+
+// 攻撃力が0になると舌を殴れなくて食われる
+// そのため、敵の体力を半分にしたら、ステータス回復の薬を飲む.
+// ただし、火の精が友達になっていれば、この薬は不要.
+// いったんコメントアウト→時間短縮のために有効化.
+?ll_="Temple"
+^&_cktm()
+
+  var NagarajaAttackCount = 0
+
+  ? ff_="Nagaraja"
+  ^& _oosr()
+    ?fs_=1
+      equipL uroboros stone
+      ShowAction("UROBOROS 蛇石")
+    ? _DebuffStaff(2)
+      aac_l = "fire sword -big D"
+      aac_r = "ice sword -big D"
+      ? mh_<mm_
+        aac_l = "vigor sword -big dL" 
+      FullMoondialing(aac_l, aac_r)
+    ? fs_=112 & ft_=55
+    //^&NagarajaAttackCount++
+      equipL mind stone
+      NagarajaAttackCount = 0
+    /*
+    ? fs_=112 & ft_=70
+      equipR dashing shield
+    ** 標準動作で元に戻っている
+    */
+      ShowAction("mind&dash ひょいっと避ける")
+
+    /*
+    ** 薬を飲むタイミングでの定義に移動
+    ** このタイミングで使うと周回は厳しくなる
+    ** 成長過程では大事だった
+    **
+    ?fh_ < fm_ * 0.5
+    //^&ls_ >= 11 
+    ^&debuffs.count>=5
+    ^&_ica
+      activate potion
+      ShowAction("HALF HP ボス折り返し地点")
+    */
+
+  //中ボス対策
+  ? ff_="Acronian"
+  ^&fd_<=10
+    ? _DebuffStaff(7)
+      FullMoondialing(aac_l, aac_r)
+

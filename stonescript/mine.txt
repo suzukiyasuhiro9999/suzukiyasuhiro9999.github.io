@@ -1,0 +1,47 @@
+//
+// -< 06 >- Boiling Mine
+//
+
+? ll_="mine"
+^&_cktm()
+
+  // ラスボス
+  ? ff_=bronze_guardian
+    // ボスのハンマーの橋が架かる前は魔法で、
+    // 架かったあとはハンマーと剣で殴る.
+    // 橋がか架かると、Y座標が0から増える
+    ? fs_=2
+    ^&fd_<=23
+    ^&ip_!"empty"
+    ^&_ica
+      activate potion
+    ? pos.y=0
+      ? fs_=1
+      ^&mh_<mm_
+        equipL Uroboros
+        equipR @C_Shield@
+        ShowAction("BOSS UROBOROS ボス 蛇石")
+      :
+        equip aether big bow *10 D
+        // equip Repeating *10
+        ShowAction("Y:0 REPEATING 速射弓→属性弓")
+        ?fs_=32&ft_=30
+          equipL mind stone
+          ShowAction("mind stone バックステップ")
+    : // 橋が架かった
+      ? fd_>=16
+        equip aether big bow *10 D
+        // equip Repeating *10
+        ShowAction("Y>0 REPEATING 速射弓→属性弓")
+      /*
+      ** repeating ではなく近距離武器を使うケース
+      **
+      ? fd_<=10
+        ? fa_>0
+          equipL @C_Sword@
+          equipR @C_Hammer@
+          ShowAction("BOTH ATTACK 剣&槌")
+        :
+          equip Repeating  *10
+          ShowAction("Y>0 REPEATING 速射弓")
+      */

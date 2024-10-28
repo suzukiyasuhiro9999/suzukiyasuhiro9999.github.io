@@ -1,0 +1,229 @@
+//
+// -< 01 >- Rocky Plateau
+//
+
+
+// weekly quest 用に平均時間を延ばす
+? ll_="rocky"
+^&la_<9000 // 5x60x30 frame = 5分よりも平均完了時間が短い
+^&_Fmg & _SFS // 移動を止めるためにこの二つのフラグをON
+^&_cktm()
+  ? tt_<3600 // 2x60x30 frame = 2分間、止まっている
+    >o3,-2,#FFFF00,  ,------------------------
+    >o3,-1,#FFFF00, , Will move in @(3600-tt_)/30@ sec...
+    >o3, 0,#FFFF00,<  For the immediate move,
+    >o3, 1,#FFFF00, ` Turn SFS or Fmg off... @tt_%2@
+    >o3, 2,#FFFF00,  `------------------------
+    ? tt_%2
+      equipR star
+    :
+      equipR shield
+
+
+// Farming するならシャベルを持つ
+? _Fmg // シャベル装備時の雑音を防ぐために else とする
+^&ll_="rocky" 
+^&harvest.distance < 10
+^&_cktm()
+  equip shovel
+  ShowAction("SHOVEL シャベル")
+  >h-4,4,Stone = @res.stone@
+
+
+// ボスの攻撃パターンを把握するために必要
+var boss_attack_count = 1
+var now_in_32 = false
+
+// phase2 用の攻撃方法
+func DysPh2()
+  ?ff_="Poison"
+    aac_l = "ice sword -big D +21"
+    aac_r = "fire sword -big D +21"
+    ? _DebuffStaff(2)
+      FullMoondialing(aac_l, aac_r)
+    ShowAction("poison < ICE 氷")
+  ?ff_="Ice"
+    aac_l = "fire sword -big D +21"
+    aac_r = "ice sword -big D +21"
+    ? _DebuffStaff(4)
+      FullMoondialing(aac_l, aac_r)
+    ShowAction("ice < FIRE 炎")
+  ?ff_="Fire"
+    aac_l = "ice sword -big *10 D +21"
+    aac_r = "aether sword -big *10 dU +17"
+    HalfMoondialing(aac_l, aac_r)
+    ShowAction("fire < AETHER 天")
+  ?ff_="Aether"
+    aac_l = "vigor sword -big *10 dL +21"
+    aac_r = "ice sword -big *10 D +21"
+    FullMoondialing(aac_l, aac_r)
+    ShowAction("aether < VIGOR 活")
+  ?ff_="Vigor"
+    aac_l = "ice sword -big D +21"
+    aac_r = "poison sword -big D +17"
+    ? _DebuffStaff(1)
+      HalfMoondialing(aac_l, aac_r)
+    ShowAction("vigor < POISON 毒")
+
+func DysPh2_noDebuff()
+  ?ff_="Poison"
+    aac_l = "ice sword -big D +21"
+    aac_r = "fire sword -big D +21"
+    FullMoondialing(aac_l, aac_r)
+    ShowAction("poison < ICE 氷")
+  ?ff_="Ice"
+    aac_l = "fire sword -big D +21"
+    aac_r = "ice sword -big D +21"
+    FullMoondialing(aac_l, aac_r)
+    ShowAction("ice < FIRE 炎")
+  ?ff_="Fire"
+    aac_l = "ice sword -big *10 D +21"
+    aac_r = "aether sword -big *10 dU +17"
+    HalfMoondialing(aac_l, aac_r)
+    ShowAction("fire < AETHER 天")
+  ?ff_="Aether"
+    aac_l = "vigor sword -big *10 dL +21"
+    aac_r = "ice sword -big *10 D +21"
+    FullMoondialing(aac_l, aac_r)
+    ShowAction("aether < VIGOR 活")
+  ?ff_="Vigor"
+    aac_l = "ice sword -big D +21"
+    aac_r = "poison sword -big D +17"
+    HalfMoondialing(aac_l, aac_r)
+    ShowAction("vigor < POISON 毒")
+
+? ll_="rocky"
+^&_cktm()
+^& !ai.enabled
+  equipL quest stone
+  ShowAction("Quest 盾回復")
+
+// 中ボス
+? ll_="rocky" & ff_="acronian" 
+^&_oosr()
+^&_cktm()
+
+  ? _DebuffStaff(7)
+    aac_l = "fire sword D -big"
+    aac_r = "ice sword D -big"
+    FullMoondialing(aac_l, aac_r)
+
+// ラスボス
+? ll_="rocky" & ff_="dysangelos"
+^&_oosr()
+//^&_cktm()
+
+  // フェーズ 1
+  ? ff_="phase1"
+  ^&_cktm()
+    ?  _DebuffStaff(7)
+      ? mh_ < mm_
+        aac_l = "ice sword D -big"
+        aac_r = "vigor sword dL -big"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("HEAL")
+      :
+        aac_l = "fire sword D -big"
+        aac_r = "ice sword D -big"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("AAC")
+   
+  // フェーズ 2
+  :? ff_="phase2"
+  ^& _cktm()
+    ? fbs_!"buff_protection" 
+      DysPh2()
+    :
+      // ボスがこのバフを獲得したらムリゲー
+      >`0,3,#FF0000,ムリゲー ムリゲー ムリゲー ムリゲー ムリゲー
+      music.Play(uulaa)
+      // loc.Pause()
+      ShowAction("buff_protection ムリゲー")
+      DysPh2_noDebuff()
+  
+
+  // フェーズ 3
+  :?ff_="phase3"
+    ? _DebuffStaff(2)
+    ^&_cktm()
+      ? mh_ < mm_
+        aac_l = "vigor sword dL -big"
+        aac_r = "ice sword D -big"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("HEAL 活+氷")
+      :?fbs_="poison"
+        aac_l = "ice sword -big D "
+        aac_r = "fire sword -big D"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("FULL 毒vs氷+火")
+      :?fbs_="ice"
+        aac_l = "fire sword -big D"
+        aac_r = "aether sword -big D"
+        HalfMoondialing(aac_l, aac_r)
+        ShowAction("HALF 氷vs火+天")
+      :?fbs_="fire"
+        aac_l = "ice sword -big *10 D"
+        aac_r = "aether sword -big *10 D"
+        HalfMoondialing(aac_l, aac_r)
+        ShowAction("HALF 火vs氷+天")
+      :?fbs_="aether"
+        aac_l = "vigor sword -big *10 dL"
+        aac_r = "ice sword -big *10 D"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("FULL 天vs活+氷")
+      :?fbs_="vigor"
+        aac_l = "ice sword -big D"
+        aac_r = "poison sword -big D"
+        HalfMoondialing(aac_l, aac_r)
+        ShowAction("HALF 活vs氷+毒")
+      :
+        aac_l = "fire sword -big D"
+        aac_r = "ice sword -big D"
+        FullMoondialing(aac_l, aac_r)
+        ShowAction("FULL 無buff")
+
+    // スタン回避用のフラグ初期化
+    ? boss_attack_count > 5
+      boss_attack_count = 1
+
+    // スタン回避用のフラグ設定
+    ? fs_ = 32 & now_in_32 = false
+      now_in_32 = true
+    ? fs_=33 & now_in_32=true
+      boss_attack_count++
+      now_in_32=false
+    
+    // スタン等の攻撃を回避
+    ? fs_=32 & boss_attack_count=3
+      // トンカチ利用 - debuff armor fatigue
+      ? ft_>=10 & ft_<68
+      ^&_igcd("hammer")
+      ^&fd_<= 8
+        ? _sttm(hammer_delay)
+          equip heavy hammer *10
+          ShowAction("heavy hammer... 重槌...")
+          ? _ica
+            activate R
+            ShowAction("hammer active 重槌 活性化")
+      // スタン回避
+      ? ft_=68
+          equipL mind
+      // 5-32-88 : 大ダメージ攻撃までに mind の回復が間に合わない
+      // 4-32-88 : 4でも間に合わない 6*を維持しても
+      /* 大ダメージ攻撃用に mind の利用を温存する
+      ? boss_attack_count=4 & ft_=88
+        equipL mind
+      */
+
+  
+    // 薬を飲む
+    ? ip_!"Empty"&_ica
+      activate potion
+      ShowAction("POTION")
+
+    // 大ダメージ攻撃をステップバックで回避する
+    ? fs_=115 & ft_=40 // 39 だとちょっと早い？？
+    ^&_cktm()
+      equipL Mind Stone
+      equipR Vigor Shield *10
+      ShowAction("MIND STONE 回避石")

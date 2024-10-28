@@ -1,0 +1,124 @@
+//
+// -< 02 >- Deadwood Canyon
+//
+
+?ll_="deadwood" & ff_="boss" 
+^& _oosr()
+// このタイミングでは CheckTimer()はしない.
+  // tree, Tree, 木
+  ? ff_="Xyloalg"
+  ^&_cktm()
+    ? _ica
+      activate potion
+      ShowAction("POTION 薬") // これを入れるとエラーになる。。
+
+/* event
+    ? fh_ < 30
+      equipL quest stone
+      equip hatchet
+      ShowAction("hatchet ハチェット")
+
+    ? _DebuffStaff(2) // 7から変えた。火が効かない？
+      equip repeating *10
+*/
+      
+    equip repeating *10
+
+    ? fs_=33 & ft_=8
+      equip bash
+      ShowAction("DASH ダッシュ")
+    ? fs_=33 & ft_=18
+      equip mind
+      ShowAction("BACK-DASH バック・ダッシュ")
+
+/* event
+    ? fh_ < 100
+      equip hatchet
+      ShowAction("ハチェット")
+*/
+
+  // Poena poena
+  ? ff_=Poena
+  // このタイミングでは CheckTimer()はしない.
+    // element は引っ込める
+    ?sgid_="cinderwisp"
+      ? _sttm (fire_unsummon_delay)
+        equipL Fire Talisman
+      :
+        ? _ica
+          activate L
+          ShowAction("Unsummon 送還")
+    ?sgid_="voidweaver"
+      ? _sttm (aether_unsummon_delay)
+        equipL Aether Talisman
+      :
+        ? _ica
+          activate L
+          ShowAction("Unsummon 送還")
+
+    /*
+    // Option 1: 時間はかかるが薬は使わない 要高レベル装備
+    ? _cktm()
+    ^& ls_ < 16
+      ? fd_ >= 11
+        // bash shield to get a long stun started.
+        equip bash
+        ShowAction("BASH バッシュ")
+        // equip dash *10
+        // ShowAction("DASH ダッシュ")
+      ? fd_ <=10 // & BigHammer()
+        equipL Moondial
+        equipR stone hammer *10 +21
+        ShowAction("STUN LOCK スタン・ロック")
+
+    // Option 2: 薬は使うけれど、時間はかからない
+    ? _cktm()
+      equip repeating // 無属性弓で殴る
+      ShowAction("REPEATING 速射弓")
+      ? 11<=fd_ & fd_<=16
+        equip dashing shield *10
+        ShowAction("DASH ダッシュ")
+    // やる気を見せたら透明薬を飲む
+    ? fs_=32 & ft_=40
+      ? _ica
+        activate potion
+        ShowAction("POTION 薬")
+    */
+
+    // Option 3: mind stone をタイミングよく使う
+    ? _cktm()
+      equip heavy crossbow // 無属性弓で殴る
+      ShowAction("crossbow 速射弓")
+    // やる気を見せたら透明薬を飲む
+    ? fs_=32 & ft_=40
+      ? _ica
+        equip mind stone
+    ? fs_=32 & ft_=45
+      ? _ica
+        equip dash
+
+// WaspやMosquitoには近づかない
+?ll_="deadwood" & fd_<=23
+^&(ff_=Wasp & ff_!Nest| ff_=Mosquito)
+^&_cktm()
+  ? !_event_special_weapon
+    equip repeating *10
+    ShowAction("REPEATING 速射弓")
+
+// イベント用 bardiche は速度優先に切り替える
+?ll_="deadwood" & fd_<=23
+^&(ff_=Wasp & ff_=Nest)
+^&_cktm()
+  ? event
+    _event_special_weapon = true
+    equip bardiche
+    ShowAction("event bardiche イベント バルディシュ")
+
+// Farming するなら木を切る
+?_Fmg
+^&ll_="deadwood" 
+^&harvest.distance < 10
+^&_cktm()
+  equip hatchet
+  ShowAction("HATCHET 手斧")
+  >h-4,4,Wood = @res.wood@

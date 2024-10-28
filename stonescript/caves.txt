@@ -1,0 +1,56 @@
+//
+// -< 03 >- Caves of Fear
+//
+
+/* event
+? ll_=caves & ff_!boss
+  equipL @C_Wand@
+  equipR @C_Shield@
+*/
+
+
+// 中ボス: Ceiling Decorator
+? ll_=caves & ff_="cool_bat"
+^&fd_<=23
+^&_cktm()
+  ? event
+    _event_special_weapon = true
+    ? fh_ > 74
+      equip repeating *10
+      ShowAction("event repeating イベント 速射弓")
+    :
+      equip experience
+      ShowAction("event experience イベント経験石")
+  :
+    ? _DebuffStaff(2) // 7から2に変更
+      equip repeating *10
+      ShowAction("repeating 速射弓")
+    ? fs_=33 & ft_=27
+      equip mind stone
+      ShowAction("mind stone バックステップ")
+
+// ボス: Bolesh, the Cunning
+? ll_=caves & ff_="spider_boss"
+^&fd_<=23
+^&_cktm()
+  ? fh_ > 60
+    equip repeating *10
+  :
+    ? event
+      equip quarter *10
+      ShowAction("event 六尺杖")
+      _event_special_weapon = true
+  /*
+  ? _DebuffStaff(2) // 7から2に変更
+    equip repeating *10
+    ShowAction("repeating 速射弓")
+  */
+
+// 大ボスに来る前に、中ボスや雑魚にデバフを喰らっているかも
+? ff_="spider_boss"
+^&debuffs.string="debuff_duration_damage"
+^&debuffs.count > 0 // 無傷ではなかったら薬を使う
+^&_ica
+  activate potion
+  ShowAction("BOLESH_POTION 薬")
+
