@@ -4,8 +4,6 @@
 
 >`10,3,#green,plateau
 
-/*
-
 // weekly quest 用に平均時間を延ばす
 ? ll_="rocky"
 ^&la_<9000 // 5x60x30 frame = 5分よりも平均完了時間が短い
@@ -229,4 +227,3 @@ func DysPh2_noDebuff()
       equipL Mind Stone
       equipR Vigor Shield *10
       ShowAction("MIND STONE 回避石")
-*/
