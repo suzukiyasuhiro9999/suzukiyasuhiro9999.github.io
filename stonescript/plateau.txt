@@ -3,7 +3,7 @@
 //
 
 >`10,3,#red,plateau
->`0,9,ll_:@ll_@
+
 /*
 // weekly quest 用に平均時間を延ばす
 ? ll_="rocky"
