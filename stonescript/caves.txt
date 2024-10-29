@@ -2,6 +2,8 @@
 // -< 03 >- Caves of Fear
 //
 
+>`0,1,caves
+
 /* event
 ? ll_=caves & ff_!boss
   equipL @C_Wand@
