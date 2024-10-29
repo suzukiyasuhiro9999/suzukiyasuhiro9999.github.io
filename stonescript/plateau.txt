@@ -2,8 +2,9 @@
 // -< 01 >- Rocky Plateau
 //
 
-equip bardiche
 >`10,3,#green,plateau
+
+/*
 
 // weekly quest 用に平均時間を延ばす
 ? ll_="rocky"
@@ -212,10 +213,9 @@ func DysPh2_noDebuff()
           equipL mind
       // 5-32-88 : 大ダメージ攻撃までに mind の回復が間に合わない
       // 4-32-88 : 4でも間に合わない 6*を維持しても
-      /* 大ダメージ攻撃用に mind の利用を温存する
-      ? boss_attack_count=4 & ft_=88
-        equipL mind
-      */
+      // 大ダメージ攻撃用に mind の利用を温存する
+      //? boss_attack_count=4 & ft_=88
+      //  equipL mind
 
   
     // 薬を飲む
@@ -229,3 +229,4 @@ func DysPh2_noDebuff()
       equipL Mind Stone
       equipR Vigor Shield *10
       ShowAction("MIND STONE 回避石")
+*/
