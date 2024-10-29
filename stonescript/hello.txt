@@ -1,1 +1,6 @@
 >`0,0,Hello World!
+
+equip bardiche
+>`10,3,#red,plateau
+
+
