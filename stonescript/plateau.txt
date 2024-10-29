@@ -2,7 +2,7 @@
 // -< 01 >- Rocky Plateau
 //
 
->`10,3,#yellow,plateau
+>`10,3,#red,plateau
 >`0,9,ll_:@ll_@
 /*
 // weekly quest 用に平均時間を延ばす
