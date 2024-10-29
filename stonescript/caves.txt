@@ -2,7 +2,7 @@
 // -< 03 >- Caves of Fear
 //
 
->`0,1,caves
+>`0,3,caves
 
 /* event
 ? ll_=caves & ff_!boss
