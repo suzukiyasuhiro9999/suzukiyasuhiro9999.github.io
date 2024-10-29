@@ -1,8 +1,4 @@
-//
-// -< 01 >- Rocky Plateau
-//
-
-equip bardiche
+equip quarter
 >`10,3,#red,plateau
 
 
